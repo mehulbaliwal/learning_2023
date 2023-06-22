@@ -1,0 +1,37 @@
+#include <stdio.h>
+
+int main() {
+    FILE *sourceFile, *destinationFile;
+    char sourcePath[100], destinationPath[100];
+    char buffer[1024];
+    size_t bytesRead;
+
+    printf("Enter the path of the source file: ");
+    scanf("%s", sourcePath);
+
+    sourceFile = fopen(sourcePath, "rb");
+    if (sourceFile == NULL) {
+        printf("Failed to open the source file.\n");
+        return 1;
+    }
+
+    printf("Enter the path of the destination file: ");
+    scanf("%s", destinationPath);
+
+    destinationFile = fopen(destinationPath, "wb");
+    if (destinationFile == NULL) {
+        printf("Failed to create the destination file.\n");
+        fclose(sourceFile);
+        return 1;
+    }
+
+    while ((bytesRead = fread(buffer, 1, 1024, sourceFile)) > 0) {
+        fwrite(buffer, 1, bytesRead, destinationFile);
+    }
+
+    fclose(sourceFile);
+    fclose(destinationFile);
+    printf("File copied successfully.\n");
+
+    return 0;
+}
